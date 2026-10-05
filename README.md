@@ -137,7 +137,7 @@ decision-wrapper decide examples/request.json --samples 3
 
 ```bash
 decision-wrapper benchmark datasets/sample_benchmark.jsonl \
-  --models gpt-5.4-mini,gpt-6-luna \
+  --models gpt-5.4-mini,gpt-6-luna,mai-code-1.1-flash \
   --reasoning-efforts low,medium,high \
   --samples 3 --out-dir benchmark-results/
 ```
@@ -153,6 +153,32 @@ Dataset format (`JSONL`, one object per line):
 ```json
 {"state": "...", "questions": {"name": {"type": "choice", "instructions": "...", "criteria": {...}}}, "expected": {"name": "expected_label"}}
 ```
+
+## Benchmark provenance: this harness vs. the published Jev benchmarks
+
+This repo currently ships only a **3-item toy dataset** (`datasets/sample_benchmark.jsonl`) to exercise the harness end-to-end. It does **not** reproduce the actual benchmarks used in TypeSafe AI's and the CMU study's evaluation of Jev:
+
+| Benchmark | What it tests | Jev score | GPT-6 score |
+| --- | --- | --- | --- |
+| RewardBench | preference judging | 92.2% | 93.5% |
+| HaluEval | factuality | 87.5% | 86.7% |
+| Answer adjudication | custom | 94.0% | 96.7% |
+| JudgeBench | derivation checking | 78.6% | 93.1% |
+| RM-Bench (hard pairs) | style-adversarial | 74.8% | 94.6% |
+
+(Carnegie Mellon, arXiv 2609.26550 — JEV cost $0.044 / 1k judgments at 0.152s vs. GPT-6's $12.182 / 1k at 1.885s.)
+
+Reproducing these against this CLI-backed wrapper is possible (dataset loaders for RewardBench/HaluEval/JudgeBench/RM-Bench would convert each into this repo's `{state, questions, expected}` JSONL format), but note the cost/time tradeoff: these datasets run from ~2,000 to ~18,000 items, and each item here costs one Copilot-CLI agent turn (~0.33-1+ premium requests, ~15-25s wall time with `samples=3`). A full RewardBench sweep would take many hours and a large premium-request budget — a stratified sample is the practical starting point.
+
+### Measured per-model cost note
+
+`premium_requests` per CLI call varies notably by model, independent of question count:
+
+| Model | premium_requests / call |
+| --- | --- |
+| gpt-5.4-mini | ~0.33 |
+| gpt-6-luna | ~0.33 |
+| mai-code-1.1-flash | ~1.0 |
 
 ## Limitations
 

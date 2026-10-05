@@ -51,7 +51,9 @@ app.command(name="decide")(decide_cmd)
 @app.command()
 def benchmark(
     dataset: Path = typer.Argument(..., help="JSONL dataset: {state, questions, expected} per line."),
-    models: str = typer.Option("gpt-5.4-mini,gpt-6-luna", help="Comma-separated model IDs."),
+    models: str = typer.Option(
+        "gpt-5.4-mini,gpt-6-luna,mai-code-1.1-flash", help="Comma-separated model IDs."
+    ),
     reasoning_efforts: str = typer.Option(
         "low,medium,high", help="Comma-separated reasoning-effort levels to sweep."
     ),
@@ -91,6 +93,23 @@ def benchmark(
         write_csv(rows, out_dir / "report.csv")
         (out_dir / "report.md").write_text(to_markdown(rows))
         console.print(f"Wrote {out_dir / 'report.csv'} and {out_dir / 'report.md'}")
+
+
+@app.command()
+def fetch_rewardbench(
+    out: Path = typer.Option(
+        Path("datasets/rewardbench_sample.jsonl"), help="Output JSONL path."
+    ),
+    n: int = typer.Option(30, help="Stratified sample size across RewardBench's 23 subsets."),
+    seed: int = typer.Option(42, help="Random seed for sampling and position randomization."),
+) -> None:
+    """Download RewardBench (allenai/reward-bench) and convert a stratified
+    sample into this repo's dataset format -- one of the actual published
+    Jev evaluation benchmarks, not a toy dataset."""
+    from .benchmark.sources.rewardbench import build_sample
+
+    items = build_sample(out, n=n, seed=seed)
+    console.print(f"Wrote {len(items)} RewardBench item(s) to {out}")
 
 
 if __name__ == "__main__":

@@ -25,6 +25,9 @@ dev = [
   "pytest-asyncio>=0.23",
   "respx>=0.21",
 ]
+datasets = [
+  "pyarrow>=16.0",
+]
 
 [project.scripts]
 decision-wrapper = "decision_wrapper.cli:app"
