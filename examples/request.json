@@ -1,0 +1,17 @@
+{
+  "model": "gpt-5.4-mini",
+  "state": "I was charged twice for order A-4471. Please refund the duplicate payment.",
+  "reasoning_effort": "low",
+  "questions": {
+    "is_urgent": { "type": "noul", "instructions": "Does this message convey urgency?" },
+    "department": {
+      "type": "choice",
+      "instructions": "Which team should handle this?",
+      "criteria": {
+        "billing": "Payments, invoicing, refunds",
+        "technical": "Bugs, outages, integrations",
+        "sales": "Pricing, upgrades, new accounts"
+      }
+    }
+  }
+}
