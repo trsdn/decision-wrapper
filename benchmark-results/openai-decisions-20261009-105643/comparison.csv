@@ -1,0 +1,5 @@
+configuration,model,reasoning_effort,correct,total,accuracy,p50_s,p95_s,ai_credits_including_warmup,base_input_cost_usd_estimate_including_warmup,input_tokens_including_warmup,results
+OpenAI Decisions,gpt-6-luna,,208,231,0.9004329004329005,0.18010790005791932,0.25523599999723956,,0.015387300000000001,153873,benchmark-results\openai-decisions-20261009-105643\jevbench
+Copilot Mini none,gpt-5.4-mini,none,190,231,0.8225108225108225,2.1943384999176487,2.558617749949917,33.9771,,,benchmark-results\jevbench-20261005-2234
+Copilot Luna none,gpt-6-luna,none,206,231,0.8917748917748918,2.4991258999798447,3.508885500021279,10.94604,,,benchmark-results\jevbench-luna-20261005-2351\none
+Copilot Luna low,gpt-6-luna,low,223,231,0.9653679653679653,2.723046200000681,4.970369899994694,11.3148275,,,benchmark-results\jevbench-luna-20261005-2351\low

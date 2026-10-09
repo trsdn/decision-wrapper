@@ -1,0 +1,133 @@
+{
+  "corpus": {
+    "protocol": "jevbench::v1.2",
+    "source_commit": "bb05a335bc809e61b20c0f745d25499a82b326fc",
+    "canonical_dataset_sha256": "dc3995d8ae1e2fc8e81ce38431add509eb8bb39b85aadfd0c7c32079382dde51",
+    "n_public_tasks": 231,
+    "scorer": "jevbench.scoring + jevbench.summarize",
+    "scope": "published public corpus only; not the current sealed-inclusive leaderboard",
+    "language": "not annotated by the published corpus; no translations added",
+    "structured_state": "serialized as Unicode JSON with sorted keys for every adapter",
+    "calibration": "GLiNER is label-only; Copilot probabilities are one-sample vote shares, not native likelihoods"
+  },
+  "comparison": [
+    {
+      "configuration": "OpenAI Decisions",
+      "model": "gpt-6-luna",
+      "reasoning_effort": null,
+      "correct": 208,
+      "total": 231,
+      "accuracy": 0.9004329004329005,
+      "p50_s": 0.18010790005791932,
+      "p95_s": 0.25523599999723956,
+      "ai_credits_including_warmup": null,
+      "base_input_cost_usd_estimate_including_warmup": 0.015387300000000001,
+      "input_tokens_including_warmup": 153873,
+      "results": "benchmark-results\\openai-decisions-20261009-105643\\jevbench"
+    },
+    {
+      "configuration": "Copilot Mini none",
+      "model": "gpt-5.4-mini",
+      "reasoning_effort": "none",
+      "correct": 190,
+      "total": 231,
+      "accuracy": 0.8225108225108225,
+      "p50_s": 2.1943384999176487,
+      "p95_s": 2.558617749949917,
+      "ai_credits_including_warmup": 33.9771,
+      "base_input_cost_usd_estimate_including_warmup": null,
+      "input_tokens_including_warmup": null,
+      "results": "benchmark-results\\jevbench-20261005-2234"
+    },
+    {
+      "configuration": "Copilot Luna none",
+      "model": "gpt-6-luna",
+      "reasoning_effort": "none",
+      "correct": 206,
+      "total": 231,
+      "accuracy": 0.8917748917748918,
+      "p50_s": 2.4991258999798447,
+      "p95_s": 3.508885500021279,
+      "ai_credits_including_warmup": 10.94604,
+      "base_input_cost_usd_estimate_including_warmup": null,
+      "input_tokens_including_warmup": null,
+      "results": "benchmark-results\\jevbench-luna-20261005-2351\\none"
+    },
+    {
+      "configuration": "Copilot Luna low",
+      "model": "gpt-6-luna",
+      "reasoning_effort": "low",
+      "correct": 223,
+      "total": 231,
+      "accuracy": 0.9653679653679653,
+      "p50_s": 2.723046200000681,
+      "p95_s": 4.970369899994694,
+      "ai_credits_including_warmup": 11.3148275,
+      "base_input_cost_usd_estimate_including_warmup": null,
+      "input_tokens_including_warmup": null,
+      "results": "benchmark-results\\jevbench-luna-20261005-2351\\low"
+    }
+  ],
+  "bilingual": {
+    "summary": [
+      {
+        "language": "de",
+        "correct": 20,
+        "total": 20,
+        "errors": 0,
+        "p50_ms": 171.6990499990061,
+        "p95_ms": 230.99700000602752,
+        "ai_credits": null
+      },
+      {
+        "language": "en",
+        "correct": 20,
+        "total": 20,
+        "errors": 0,
+        "p50_ms": 197.6204999955371,
+        "p95_ms": 243.8002999406308,
+        "ai_credits": null
+      }
+    ],
+    "billing": {
+      "input_tokens": 7383,
+      "base_input_cost_usd_estimate": 0.0007383,
+      "base_input_usd_per_million": 0.1,
+      "pricing_source": "https://developers.openai.com/api/docs/guides/decisions",
+      "note": "Base-rate estimate on reported total input tokens, including warmups; not an invoice. Regional premiums, long-context multipliers and account-specific adjustments are excluded. Copilot AI credits are not applicable."
+    }
+  },
+  "audit": {
+    "OpenAI Decisions": {
+      "audited_items": 231,
+      "same_task_order": true,
+      "scorer_replay": "exact match",
+      "errors": 0
+    },
+    "Copilot Mini none": {
+      "audited_items": 231,
+      "same_task_order": true,
+      "scorer_replay": "exact match",
+      "errors": 0
+    },
+    "Copilot Luna none": {
+      "audited_items": 231,
+      "same_task_order": true,
+      "scorer_replay": "exact match",
+      "errors": 0
+    },
+    "Copilot Luna low": {
+      "audited_items": 231,
+      "same_task_order": true,
+      "scorer_replay": "exact match",
+      "errors": 0
+    },
+    "OpenAI bilingual": {
+      "audited_items": 40,
+      "correct": 40,
+      "prediction_replay": "exact match"
+    }
+  },
+  "scope": "Same 231 published public tasks and original scorer; provider aliases are unpinned and runs occurred on different days.",
+  "cost_note": "OpenAI USD figures are published-base-rate estimates, not invoices; Copilot AI credits are separate units. Warmups are included."
+}

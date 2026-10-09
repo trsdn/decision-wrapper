@@ -1,0 +1,891 @@
+{
+  "metadata": {
+    "engine": "gliner",
+    "checkpoint": "fastino/GLiNER2.5-multi-Decide",
+    "device": "cpu",
+    "threads": 4,
+    "python": "3.13.15 (tags/v3.13.15:4061bc4, Aug  5 2026, 13:05:39) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "order_seed": 42,
+    "dataset": "benchmark-results\\runtimes\\jevbench\\datasets\\public",
+    "dataset_sha256": "dc3995d8ae1e2fc8e81ce38431add509eb8bb39b85aadfd0c7c32079382dde51",
+    "reasoning_effort": null,
+    "samples": 1,
+    "packages": {
+      "torch": "2.14.0",
+      "transformers": "4.57.6",
+      "peft": "0.18.1",
+      "gliner2": "2.0.0"
+    },
+    "confidence_note": "Native scores are retained; GLiNER has no full distribution and Mini's one-sample vote shares are not native likelihoods.",
+    "jevbench": {
+      "protocol": "jevbench::v1.2",
+      "source_commit": "bb05a335bc809e61b20c0f745d25499a82b326fc",
+      "canonical_dataset_sha256": "dc3995d8ae1e2fc8e81ce38431add509eb8bb39b85aadfd0c7c32079382dde51",
+      "n_public_tasks": 231,
+      "scorer": "jevbench.scoring + jevbench.summarize",
+      "scope": "published public corpus only; not the current sealed-inclusive leaderboard",
+      "language": "not annotated by the published corpus; no translations added",
+      "structured_state": "serialized as Unicode JSON with sorted keys for every adapter",
+      "calibration": "GLiNER is label-only; Mini probabilities are one-sample vote shares, not native likelihoods"
+    },
+    "revision": "a35a0cd3b7a0f00f2effc576f454cd48fa98aa5f",
+    "context_policy": "native GLiNER tokenizer/collator window and truncation",
+    "load_ms": 16884.8840999417
+  },
+  "warmups": [
+    {
+      "language": "en",
+      "latency_ms": 202.54600001499057,
+      "ai_credits": 0.0
+    },
+    {
+      "language": "de",
+      "latency_ms": 131.89009996131063,
+      "ai_credits": 0.0
+    }
+  ],
+  "summary": [
+    {
+      "language": "unspecified",
+      "correct": 126,
+      "total": 231,
+      "errors": 0,
+      "p50_ms": 221.42219997476786,
+      "p95_ms": 18217.70729997661,
+      "ai_credits": 0.0
+    }
+  ],
+  "total_ai_credits_including_warmup": 0.0,
+  "jevbench": {
+    "n_planned": 231,
+    "n_attempted": 231,
+    "n_scorable": 231,
+    "n_valid": 231,
+    "n_correct": 126,
+    "accuracy": 0.5454545454545454,
+    "coverage": 1.0,
+    "schema_validity": 1.0,
+    "schema_validity_strict": 1.0,
+    "n_renormalized": 0,
+    "operational_success": 1.0,
+    "calibration_n": 0,
+    "brier_mean": null,
+    "ece": null,
+    "ordinal_mae": null,
+    "latency": {
+      "n": 231,
+      "p50_s": 0.22142219997476786,
+      "p95_s": 17.987295900005847
+    },
+    "latency_failures": {
+      "n": 0,
+      "p50_s": null,
+      "p95_s": null
+    },
+    "price_per_1000_decisions_usd": null,
+    "cost_basis": [
+      "local_cpu_no_provider_tariff"
+    ],
+    "version": "jevbench-v1",
+    "macro_accuracy": 0.5003448845425109,
+    "per_family": {
+      "adequacy": {
+        "n_planned": 12,
+        "n_attempted": 12,
+        "n_scorable": 12,
+        "n_valid": 12,
+        "n_correct": 4,
+        "accuracy": 0.3333333333333333,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 12,
+          "p50_s": 0.17558565008221194,
+          "p95_s": 0.1889712449978106
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "adversarial": {
+        "n_planned": 6,
+        "n_attempted": 6,
+        "n_scorable": 6,
+        "n_valid": 6,
+        "n_correct": 3,
+        "accuracy": 0.5,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 6,
+          "p50_s": 0.43508580001071095,
+          "p95_s": 0.47859079993213527
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "ambiguous": {
+        "n_planned": 7,
+        "n_attempted": 7,
+        "n_scorable": 7,
+        "n_valid": 7,
+        "n_correct": 2,
+        "accuracy": 0.2857142857142857,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 7,
+          "p50_s": 0.7643913000356406,
+          "p95_s": 0.9086596999550238
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "extraction": {
+        "n_planned": 24,
+        "n_attempted": 24,
+        "n_scorable": 24,
+        "n_valid": 24,
+        "n_correct": 20,
+        "accuracy": 0.8333333333333334,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 24,
+          "p50_s": 0.1708809999981895,
+          "p95_s": 0.1868385949579533
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "fact": {
+        "n_planned": 12,
+        "n_attempted": 12,
+        "n_scorable": 12,
+        "n_valid": 12,
+        "n_correct": 12,
+        "accuracy": 1.0,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 12,
+          "p50_s": 0.16451445000711828,
+          "p95_s": 0.1698590399697423
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "intent": {
+        "n_planned": 24,
+        "n_attempted": 24,
+        "n_scorable": 24,
+        "n_valid": 24,
+        "n_correct": 20,
+        "accuracy": 0.8333333333333334,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 24,
+          "p50_s": 0.18821875005960464,
+          "p95_s": 0.21307358998456039
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "judge_hard": {
+        "n_planned": 17,
+        "n_attempted": 17,
+        "n_scorable": 17,
+        "n_valid": 17,
+        "n_correct": 9,
+        "accuracy": 0.5294117647058824,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 17,
+          "p50_s": 0.523271800018847,
+          "p95_s": 0.7118342600530013
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "long_policy": {
+        "n_planned": 19,
+        "n_attempted": 19,
+        "n_scorable": 19,
+        "n_valid": 19,
+        "n_correct": 4,
+        "accuracy": 0.21052631578947367,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 19,
+          "p50_s": 17.756884500035085,
+          "p95_s": 43.91878852996741
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "multi_hop": {
+        "n_planned": 18,
+        "n_attempted": 18,
+        "n_scorable": 18,
+        "n_valid": 18,
+        "n_correct": 7,
+        "accuracy": 0.3888888888888889,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 18,
+          "p50_s": 14.872887599980459,
+          "p95_s": 34.685649895027744
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "ordinal": {
+        "n_planned": 12,
+        "n_attempted": 12,
+        "n_scorable": 12,
+        "n_valid": 12,
+        "n_correct": 10,
+        "accuracy": 0.8333333333333334,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 12,
+          "p50_s": 0.19505619996925816,
+          "p95_s": 0.20032763003837317
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "policy": {
+        "n_planned": 12,
+        "n_attempted": 12,
+        "n_scorable": 12,
+        "n_valid": 12,
+        "n_correct": 9,
+        "accuracy": 0.75,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 12,
+          "p50_s": 0.18552195001393557,
+          "p95_s": 0.20134914001682774
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "probability": {
+        "n_planned": 10,
+        "n_attempted": 10,
+        "n_scorable": 10,
+        "n_valid": 10,
+        "n_correct": 4,
+        "accuracy": 0.4,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 10,
+          "p50_s": 1.2189510999596678,
+          "p95_s": 3.4844656450499287
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "routing": {
+        "n_planned": 12,
+        "n_attempted": 12,
+        "n_scorable": 12,
+        "n_valid": 12,
+        "n_correct": 2,
+        "accuracy": 0.16666666666666666,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 12,
+          "p50_s": 0.2168073999346234,
+          "p95_s": 0.22334554500412196
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "routing_hard": {
+        "n_planned": 5,
+        "n_attempted": 5,
+        "n_scorable": 5,
+        "n_valid": 5,
+        "n_correct": 1,
+        "accuracy": 0.2,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 5,
+          "p50_s": 0.5531737999990582,
+          "p95_s": 0.589156880020164
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "temporal_numeric": {
+        "n_planned": 15,
+        "n_attempted": 15,
+        "n_scorable": 15,
+        "n_valid": 15,
+        "n_correct": 3,
+        "accuracy": 0.2,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 15,
+          "p50_s": 0.788816099986434,
+          "p95_s": 1.8479788200114853
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "tool_selection": {
+        "n_planned": 12,
+        "n_attempted": 12,
+        "n_scorable": 12,
+        "n_valid": 12,
+        "n_correct": 12,
+        "accuracy": 1.0,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 12,
+          "p50_s": 0.2058259499608539,
+          "p95_s": 0.22905270500923508
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "tradeoff": {
+        "n_planned": 6,
+        "n_attempted": 6,
+        "n_scorable": 6,
+        "n_valid": 6,
+        "n_correct": 1,
+        "accuracy": 0.16666666666666666,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 6,
+          "p50_s": 1.1149059500312433,
+          "p95_s": 1.7274206999863964
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "trap": {
+        "n_planned": 8,
+        "n_attempted": 8,
+        "n_scorable": 8,
+        "n_valid": 8,
+        "n_correct": 3,
+        "accuracy": 0.375,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 8,
+          "p50_s": 0.4663583000074141,
+          "p95_s": 0.5814897850679699
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      }
+    },
+    "complete": true,
+    "paraphrase_consistency": {
+      "pairs": 36,
+      "both_valid": 36,
+      "agree": 29,
+      "agreement": 0.8055555555555556,
+      "both_correct_rate_all_pairs": 0.4722222222222222
+    },
+    "model_identities": [
+      "gliner"
+    ],
+    "probability_sources": [
+      "label_only_no_calibrated_distribution"
+    ],
+    "splits": {
+      "public": {
+        "n_planned": 231,
+        "n_attempted": 231,
+        "n_scorable": 231,
+        "n_valid": 231,
+        "n_correct": 126,
+        "accuracy": 0.5454545454545454,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 231,
+          "p50_s": 0.22142219997476786,
+          "p95_s": 17.987295900005847
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      }
+    },
+    "ledger_charged_usd": null,
+    "per_type": {
+      "noul": {
+        "n_planned": 74,
+        "n_attempted": 74,
+        "n_scorable": 74,
+        "n_valid": 74,
+        "n_correct": 40,
+        "accuracy": 0.5405405405405406,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 74,
+          "p50_s": 0.30118095001671463,
+          "p95_s": 9.146225574990964
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "choice": {
+        "n_planned": 139,
+        "n_attempted": 139,
+        "n_scorable": 139,
+        "n_valid": 139,
+        "n_correct": 74,
+        "accuracy": 0.5323741007194245,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 139,
+          "p50_s": 0.2256963000399992,
+          "p95_s": 18.31557222998235
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "score": {
+        "n_planned": 18,
+        "n_attempted": 18,
+        "n_scorable": 18,
+        "n_valid": 18,
+        "n_correct": 12,
+        "accuracy": 0.6666666666666666,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 18,
+          "p50_s": 0.1975967999896966,
+          "p95_s": 34.67492765003698
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      }
+    },
+    "per_tier": {
+      "easy": {
+        "n_planned": 48,
+        "n_attempted": 48,
+        "n_scorable": 48,
+        "n_valid": 48,
+        "n_correct": 48,
+        "accuracy": 1.0,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 48,
+          "p50_s": 0.1804357499931939,
+          "p95_s": 0.22003941999864762
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "hard": {
+        "n_planned": 111,
+        "n_attempted": 111,
+        "n_scorable": 111,
+        "n_valid": 111,
+        "n_correct": 37,
+        "accuracy": 0.3333333333333333,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 111,
+          "p50_s": 0.9169597999425605,
+          "p95_s": 27.79546140000457
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      },
+      "original": {
+        "n_planned": 72,
+        "n_attempted": 72,
+        "n_scorable": 72,
+        "n_valid": 72,
+        "n_correct": 41,
+        "accuracy": 0.5694444444444444,
+        "coverage": 1.0,
+        "schema_validity": 1.0,
+        "schema_validity_strict": 1.0,
+        "n_renormalized": 0,
+        "operational_success": 1.0,
+        "calibration_n": 0,
+        "brier_mean": null,
+        "ece": null,
+        "ordinal_mae": null,
+        "latency": {
+          "n": 72,
+          "p50_s": 0.18705200002295896,
+          "p95_s": 0.21948948999634013
+        },
+        "latency_failures": {
+          "n": 0,
+          "p50_s": null,
+          "p95_s": null
+        },
+        "price_per_1000_decisions_usd": null,
+        "cost_basis": [
+          "local_cpu_no_provider_tariff"
+        ]
+      }
+    }
+  }
+}

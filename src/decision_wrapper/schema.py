@@ -16,7 +16,7 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 # Reasoning-effort ("thinking mode") levels. These are passed straight through
 # to the underlying chat model when it supports a `reasoning_effort`-style
 # parameter, and otherwise degrade to a prompt-engineered instruction.
-ReasoningEffort = Literal["minimal", "low", "medium", "high", "xhigh"]
+ReasoningEffort = Literal["none", "minimal", "low", "medium", "high", "xhigh"]
 
 
 class QuestionType(str, Enum):
@@ -100,10 +100,9 @@ Answer = Union[NoulAnswer, ChoiceAnswer, ScoreAnswer]
 class Usage(BaseModel):
     """Cost/latency accounting.
 
-    The Copilot CLI backend bills in "premium requests" (its own credit
-    unit), not raw tokens, and each invocation is a full agent turn (large
-    fixed system-prompt overhead) rather than a bare completions call. We
-    surface both the raw CLI accounting and an optional USD estimate.
+    AI credits are read from runtime nano-AIU accounting, not inferred from
+    request counts or model multipliers. None means unavailable, not free.
+    premium_requests is retained only for legacy-client compatibility.
     """
 
     samples: int = 1
@@ -111,6 +110,9 @@ class Usage(BaseModel):
     prompt_tokens: int = 0
     api_duration_ms: float = 0.0
     cost_usd: Optional[float] = None
+    ai_credits: Optional[float] = Field(
+        None, ge=0, description="Actual AI credits consumed; null if unavailable."
+    )
 
 
 class DecisionResponse(BaseModel):

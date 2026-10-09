@@ -1,0 +1,112 @@
+{
+  "metadata": {
+    "engine": "openai",
+    "checkpoint": "gpt-6-luna",
+    "device": "remote",
+    "threads": null,
+    "python": "3.13.15 (tags/v3.13.15:4061bc4, Aug  5 2026, 13:05:39) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "order_seed": 42,
+    "dataset": "datasets\\bilingual_benchmark.jsonl",
+    "dataset_sha256": "fe476e611b757a1c9bf5a0215f7f0cf703e4556e3cf08dbefeda85a8b38fd4eb",
+    "reasoning_effort": null,
+    "samples": 1,
+    "packages": {
+      "httpx": "0.28.1"
+    },
+    "confidence_note": "Native OpenAI distributions and separate confidence are retained; score accuracy uses posterior argmax, not rounded mean.",
+    "context_policy": "complete text and typed questions; no client-side truncation",
+    "load_ms": 688.6280999751762
+  },
+  "warmups": [
+    {
+      "language": "en",
+      "latency_ms": 730.428299983032,
+      "ai_credits": null,
+      "input_tokens": 158,
+      "base_input_cost_usd_estimate": 1.58e-05,
+      "raw": {
+        "model": "gpt-6-luna",
+        "answers": [
+          {
+            "type": "predicate",
+            "name": "warmup",
+            "probability": 1.0
+          }
+        ],
+        "usage": {
+          "input_tokens": 158,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 158
+        }
+      }
+    },
+    {
+      "language": "de",
+      "latency_ms": 1183.1390999723226,
+      "ai_credits": null,
+      "input_tokens": 158,
+      "base_input_cost_usd_estimate": 1.58e-05,
+      "raw": {
+        "model": "gpt-6-luna",
+        "answers": [
+          {
+            "type": "predicate",
+            "name": "warmup",
+            "probability": 1.0
+          }
+        ],
+        "usage": {
+          "input_tokens": 158,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 158
+        }
+      }
+    }
+  ],
+  "summary": [
+    {
+      "language": "de",
+      "correct": 20,
+      "total": 20,
+      "errors": 0,
+      "p50_ms": 171.6990499990061,
+      "p95_ms": 230.99700000602752,
+      "ai_credits": null
+    },
+    {
+      "language": "en",
+      "correct": 20,
+      "total": 20,
+      "errors": 0,
+      "p50_ms": 197.6204999955371,
+      "p95_ms": 243.8002999406308,
+      "ai_credits": null
+    }
+  ],
+  "total_ai_credits_including_warmup": null,
+  "complete": true,
+  "attempted": 40,
+  "planned": 40,
+  "openai_billing": {
+    "input_tokens": 7383,
+    "base_input_cost_usd_estimate": 0.0007383,
+    "base_input_usd_per_million": 0.1,
+    "pricing_source": "https://developers.openai.com/api/docs/guides/decisions",
+    "note": "Base-rate estimate on reported total input tokens, including warmups; not an invoice. Regional premiums, long-context multipliers and account-specific adjustments are excluded. Copilot AI credits are not applicable."
+  }
+}

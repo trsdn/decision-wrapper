@@ -1,6 +1,6 @@
 """Benchmark harness: run a labeled dataset across a grid of
 (model x reasoning_effort) combinations and measure latency, cost
-(premium requests), and accuracy.
+(AI credits), and accuracy.
 """
 
 from __future__ import annotations
@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
-from ..backend import CopilotCliBackend
+from ..backend import CopilotCliBackend, create_backend
 from ..engine import decide
 from ..schema import DecisionRequest, ReasoningEffort
 
@@ -54,6 +54,7 @@ class ItemResult:
     premium_requests: float
     samples: int
     mismatches: List[str] = field(default_factory=list)
+    ai_credits: Optional[float] = None
 
 
 @dataclass
@@ -63,6 +64,7 @@ class RunConfig:
     samples: int = 3
     max_concurrency: int = 4
     timeout_s: float = 90.0
+    warm: bool = False
 
 
 def _answer_value(answer) -> Any:
@@ -76,9 +78,17 @@ def _answer_value(answer) -> Any:
 async def run_benchmark(
     items: Iterable[DatasetItem], config: RunConfig
 ) -> List[ItemResult]:
-    backend = CopilotCliBackend(
-        max_concurrency=config.max_concurrency, timeout_s=config.timeout_s
-    )
+    async with create_backend(
+        warm=config.warm,
+        max_concurrency=config.max_concurrency,
+        timeout_s=config.timeout_s,
+    ) as backend:
+        return await _run_items(items, config, backend)
+
+
+async def _run_items(
+    items: Iterable[DatasetItem], config: RunConfig, backend: CopilotCliBackend
+) -> List[ItemResult]:
     results: List[ItemResult] = []
     items = list(items)
 
@@ -117,6 +127,7 @@ async def run_benchmark(
                         premium_requests=response.usage.premium_requests,
                         samples=response.usage.samples,
                         mismatches=mismatches,
+                        ai_credits=response.usage.ai_credits,
                     )
                 )
     return results

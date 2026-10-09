@@ -1,0 +1,186 @@
+{
+  "scope": {
+    "protocol": "jevbench::v1.2",
+    "source_commit": "bb05a335bc809e61b20c0f745d25499a82b326fc",
+    "canonical_dataset_sha256": "dc3995d8ae1e2fc8e81ce38431add509eb8bb39b85aadfd0c7c32079382dde51",
+    "n_public_tasks": 231,
+    "scorer": "jevbench.scoring + jevbench.summarize",
+    "scope": "published public corpus only; not the current sealed-inclusive leaderboard",
+    "language": "not annotated by the published corpus; no translations added",
+    "structured_state": "serialized as Unicode JSON with sorted keys for every adapter",
+    "calibration": "GLiNER is label-only; Copilot probabilities are one-sample vote shares, not native likelihoods"
+  },
+  "results": [
+    {
+      "configuration": "Mini none",
+      "model": "gpt-5.4-mini",
+      "reasoning_effort": "none",
+      "correct": 190,
+      "total": 231,
+      "accuracy": 0.8225108225108225,
+      "p50_s": 2.1943384999176487,
+      "p95_s": 2.558617749949917,
+      "total_ai_credits_including_warmups": 33.9771,
+      "timed_ai_credits": 33.647385,
+      "failures": 0
+    },
+    {
+      "configuration": "Luna none",
+      "model": "gpt-6-luna",
+      "reasoning_effort": "none",
+      "correct": 206,
+      "total": 231,
+      "accuracy": 0.8917748917748918,
+      "p50_s": 2.4991258999798447,
+      "p95_s": 3.508885500021279,
+      "total_ai_credits_including_warmups": 10.94604,
+      "timed_ai_credits": 10.865055,
+      "failures": 0
+    },
+    {
+      "configuration": "Luna low",
+      "model": "gpt-6-luna",
+      "reasoning_effort": "low",
+      "correct": 223,
+      "total": 231,
+      "accuracy": 0.9653679653679653,
+      "p50_s": 2.723046200000681,
+      "p95_s": 4.970369899994694,
+      "total_ai_credits_including_warmups": 11.3148275,
+      "timed_ai_credits": 11.233905,
+      "failures": 0
+    }
+  ],
+  "breakdown": {
+    "Mini none": {
+      "per_tier": {
+        "easy": [
+          48,
+          48
+        ],
+        "hard": [
+          77,
+          111
+        ],
+        "original": [
+          65,
+          72
+        ]
+      },
+      "per_type": {
+        "noul": [
+          60,
+          74
+        ],
+        "choice": [
+          117,
+          139
+        ],
+        "score": [
+          13,
+          18
+        ]
+      }
+    },
+    "Luna none": {
+      "per_tier": {
+        "easy": [
+          48,
+          48
+        ],
+        "hard": [
+          88,
+          111
+        ],
+        "original": [
+          70,
+          72
+        ]
+      },
+      "per_type": {
+        "noul": [
+          68,
+          74
+        ],
+        "choice": [
+          122,
+          139
+        ],
+        "score": [
+          16,
+          18
+        ]
+      }
+    },
+    "Luna low": {
+      "per_tier": {
+        "easy": [
+          48,
+          48
+        ],
+        "hard": [
+          103,
+          111
+        ],
+        "original": [
+          72,
+          72
+        ]
+      },
+      "per_type": {
+        "noul": [
+          71,
+          74
+        ],
+        "choice": [
+          134,
+          139
+        ],
+        "score": [
+          18,
+          18
+        ]
+      }
+    }
+  },
+  "paired": {
+    "none_to_low_corrected": [
+      "hard-sol-b-temporal_numeric-04",
+      "hard-sol-b-temporal_numeric-02",
+      "hard-opus-b-ambiguous-03",
+      "hard-opus-a-long_policy-01",
+      "hard-sol-a-multi_hop-08",
+      "original-routing-06-1",
+      "hard-opus-a-temporal_numeric-09",
+      "hard-opus-c-probability-03",
+      "hard-opus-b-ambiguous-10",
+      "hard-opus-a-long_policy-04",
+      "hard-opus-c-long_policy-08",
+      "hard-opus-b-multi_hop-07",
+      "hard-sol-b-temporal_numeric-01",
+      "hard-opus-c-temporal_numeric-02",
+      "hard-opus-c-long_policy-05",
+      "hard-opus-c-temporal_numeric-03",
+      "original-adequacy-05-0",
+      "hard-opus-a-long_policy-08",
+      "hard-sol-b-temporal_numeric-03",
+      "hard-opus-a-probability-08"
+    ],
+    "none_to_low_regressed": [
+      "hard-sol-a-multi_hop-12",
+      "hard-opus-a-long_policy-13",
+      "hard-opus-c-long_policy-10"
+    ],
+    "low_remaining_errors": [
+      "hard-opus-b-probability-02",
+      "hard-opus-a-temporal_numeric-03",
+      "hard-sol-b-judge_hard-02",
+      "hard-sol-a-multi_hop-12",
+      "hard-opus-c-temporal_numeric-04",
+      "hard-sol-a-multi_hop-09",
+      "hard-opus-a-long_policy-13",
+      "hard-opus-c-long_policy-10"
+    ]
+  },
+  "comparison_note": "Sequential single-sample runs; Mini is the previously measured reference. Actual credit usage includes provider cache effects."
+}

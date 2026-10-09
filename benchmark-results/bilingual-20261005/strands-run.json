@@ -1,0 +1,57 @@
+{
+  "metadata": {
+    "engine": "strands",
+    "checkpoint": "StrandsAgents/strands-decider-2B-hobson-v21",
+    "device": "cpu",
+    "threads": 4,
+    "python": "3.13.15 (tags/v3.13.15:4061bc4, Aug  5 2026, 13:05:39) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "order_seed": 42,
+    "dataset": "datasets\\bilingual_benchmark.jsonl",
+    "dataset_sha256": "fe476e611b757a1c9bf5a0215f7f0cf703e4556e3cf08dbefeda85a8b38fd4eb",
+    "reasoning_effort": null,
+    "samples": 1,
+    "packages": {
+      "torch": "2.14.0",
+      "transformers": "5.17.0",
+      "peft": "0.21.0",
+      "strands-decider": "0.0.1.dev1+g3e94e9d84"
+    },
+    "confidence_note": "Native scores are retained, not synthesized by voting; this smoke set does not establish calibration.",
+    "revision": "2b52a6235c1b8306bbfa30b00b9d4b74b63a39f5",
+    "load_ms": 66028.33660005126
+  },
+  "warmups": [
+    {
+      "language": "en",
+      "latency_ms": 1356.6560000181198,
+      "ai_credits": 0.0
+    },
+    {
+      "language": "de",
+      "latency_ms": 1283.626800053753,
+      "ai_credits": 0.0
+    }
+  ],
+  "summary": [
+    {
+      "language": "de",
+      "correct": 20,
+      "total": 20,
+      "errors": 0,
+      "p50_ms": 1674.2486000293866,
+      "p95_ms": 2193.974700057879,
+      "ai_credits": 0.0
+    },
+    {
+      "language": "en",
+      "correct": 19,
+      "total": 20,
+      "errors": 0,
+      "p50_ms": 1506.6668500076048,
+      "p95_ms": 1890.4135999036953,
+      "ai_credits": 0.0
+    }
+  ],
+  "total_ai_credits_including_warmup": 0.0
+}

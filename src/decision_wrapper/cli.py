@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 from pathlib import Path
 from typing import List, Optional
 
@@ -9,11 +10,11 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
-from .backend import CopilotCliBackend
+from .backend import create_backend
 from .benchmark.report import summarize, to_markdown, write_csv
 from .benchmark.runner import RunConfig, load_dataset, run_benchmark
 from .engine import decide
-from .schema import DecisionRequest
+from .schema import DecisionRequest, DecisionResponse
 
 app = typer.Typer(add_completion=False, help="Jev-style decision API wrapper on top of the Copilot CLI.")
 console = Console()
@@ -24,9 +25,13 @@ def serve(
     host: str = "127.0.0.1",
     port: int = 8099,
     reload: bool = False,
+    warm: bool = typer.Option(False, "--warm", help="Keep a Copilot CLI process warm across requests."),
 ) -> None:
     """Run the FastAPI decision server."""
     import uvicorn
+
+    if warm:
+        os.environ["DECISION_WRAPPER_WARM"] = "1"
 
     uvicorn.run("decision_wrapper.app:app", host=host, port=port, reload=reload)
 
@@ -36,12 +41,17 @@ def decide_cmd(
     request_file: Path = typer.Argument(..., help="JSON file matching the DecisionRequest schema."),
     samples: int = typer.Option(3, help="Independent CLI samples per question for calibration."),
     concurrency: int = typer.Option(4, help="Max concurrent `copilot` subprocesses."),
+    warm: bool = typer.Option(False, "--warm", help="Reuse a Copilot CLI process with fresh sample sessions."),
 ) -> None:
     """Evaluate a single DecisionRequest JSON file and print the response."""
     payload = json.loads(request_file.read_text())
     request = DecisionRequest.model_validate(payload)
-    backend = CopilotCliBackend(max_concurrency=concurrency)
-    response = asyncio.run(decide(request, backend, samples=samples))
+
+    async def run() -> DecisionResponse:
+        async with create_backend(warm=warm, max_concurrency=concurrency) as backend:
+            return await decide(request, backend, samples=samples)
+
+    response = asyncio.run(run())
     console.print_json(response.model_dump_json())
 
 
@@ -61,6 +71,7 @@ def benchmark(
     concurrency: int = typer.Option(4, help="Max concurrent `copilot` subprocesses."),
     timeout_s: float = typer.Option(90.0, help="Per-call timeout in seconds."),
     out_dir: Optional[Path] = typer.Option(None, help="Directory to write report.csv/report.md."),
+    warm: bool = typer.Option(False, "--warm", help="Reuse a Copilot CLI process across the benchmark."),
 ) -> None:
     """Sweep models x reasoning-effort modes over a labeled dataset and
     report accuracy, latency, and premium-request cost per combination."""
@@ -72,6 +83,7 @@ def benchmark(
         samples=samples,
         max_concurrency=concurrency,
         timeout_s=timeout_s,
+        warm=warm,
     )
     console.print(
         f"Running {len(items)} item(s) x {len(config.models)} model(s) x "
@@ -80,12 +92,14 @@ def benchmark(
     )
     results = asyncio.run(run_benchmark(items, config))
     rows = summarize(results)
+    if any(row["total_ai_credits"] is None for row in rows):
+        console.print("[yellow]AI-credit accounting is unavailable for some calls; costs are unknown, not zero.[/yellow]")
 
     table = Table(title="Decision benchmark")
     for col in rows[0].keys() if rows else []:
         table.add_column(col)
     for row in rows:
-        table.add_row(*(f"{v:.3f}" if isinstance(v, float) else str(v) for v in row.values()))
+        table.add_row(*("unknown" if v is None else f"{v:.3f}" if isinstance(v, float) else str(v) for v in row.values()))
     console.print(table)
 
     if out_dir:

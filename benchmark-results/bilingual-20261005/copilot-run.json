@@ -1,0 +1,53 @@
+{
+  "metadata": {
+    "engine": "copilot",
+    "checkpoint": "gpt-5.4-mini",
+    "device": "remote",
+    "threads": null,
+    "python": "3.13.15 (tags/v3.13.15:4061bc4, Aug  5 2026, 13:05:39) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "order_seed": 42,
+    "dataset": "datasets\\bilingual_benchmark.jsonl",
+    "dataset_sha256": "fe476e611b757a1c9bf5a0215f7f0cf703e4556e3cf08dbefeda85a8b38fd4eb",
+    "reasoning_effort": "none",
+    "samples": 1,
+    "packages": {
+      "github-copilot-sdk": "1.0.15"
+    },
+    "confidence_note": "Native scores are retained, not synthesized by voting; this smoke set does not establish calibration.",
+    "load_ms": 4873.844199930318
+  },
+  "warmups": [
+    {
+      "language": "en",
+      "latency_ms": 5809.055499965325,
+      "ai_credits": 0.225375
+    },
+    {
+      "language": "de",
+      "latency_ms": 2155.4859000025317,
+      "ai_credits": 0.10464
+    }
+  ],
+  "summary": [
+    {
+      "language": "de",
+      "correct": 20,
+      "total": 20,
+      "errors": 0,
+      "p50_ms": 2210.5068000382744,
+      "p95_ms": 3497.995899990201,
+      "ai_credits": 2.163225
+    },
+    {
+      "language": "en",
+      "correct": 20,
+      "total": 20,
+      "errors": 0,
+      "p50_ms": 2303.525700001046,
+      "p95_ms": 2929.9011999974027,
+      "ai_credits": 2.1363
+    }
+  ],
+  "total_ai_credits_including_warmup": 4.6295399999999995
+}

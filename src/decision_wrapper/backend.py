@@ -14,8 +14,10 @@ from __future__ import annotations
 
 import asyncio
 import json
+import math
 import re
 import shutil
+import sys
 import tempfile
 import time
 import uuid
@@ -26,10 +28,27 @@ from typing import Optional
 from .schema import ReasoningEffort
 
 COPILOT_BIN = shutil.which("copilot") or "copilot"
+NANO_AIU_PER_CREDIT = 1_000_000_000
 
 
 class BackendError(RuntimeError):
     """Raised when the Copilot CLI fails or returns no usable answer."""
+
+
+def nano_aiu_to_credits(value: int | float) -> float:
+    if (
+        isinstance(value, bool)
+        or not isinstance(value, (int, float))
+        or not math.isfinite(value)
+        or value < 0
+    ):
+        raise BackendError(f"invalid AI-credit accounting: totalNanoAiu={value!r}")
+    return value / NANO_AIU_PER_CREDIT
+
+
+def _credits_from_usage(usage: dict) -> Optional[float]:
+    value = usage.get("totalNanoAiu")
+    return None if value is None else nano_aiu_to_credits(value)
 
 
 @dataclass
@@ -42,6 +61,7 @@ class CallResult:
     api_duration_ms: float = 0.0
     wall_time_ms: float = 0.0
     raw_events: list = field(default_factory=list)
+    ai_credits: Optional[float] = None
 
 
 class CopilotCliBackend:
@@ -58,13 +78,20 @@ class CopilotCliBackend:
         self.binary = binary
         self.timeout_s = timeout_s
         self._semaphore = asyncio.Semaphore(max_concurrency)
-        # Flags that keep calls fast, deterministic, and side-effect free:
-        # no repo instructions, no built-in MCP servers, no interactive
-        # approval prompts (required for non-interactive mode).
-        self.extra_args = extra_args or [
-            "--allow-all-tools",
+        self.extra_args = list(extra_args) if extra_args is not None else [
             "--disable-builtin-mcps",
             "--no-custom-instructions",
+        ]
+        self._tool_free_args()
+
+    def _tool_free_args(self) -> list[str]:
+        for arg in self.extra_args:
+            if arg == "--" or (
+                arg.split("=", 1)[0] == "--available-tools" and arg != "--available-tools="
+            ):
+                raise BackendError("decision backends must not enable tools through extra_args")
+        return [arg for arg in self.extra_args if arg != "--available-tools="] + [
+            "--available-tools="
         ]
 
     async def complete(
@@ -77,6 +104,19 @@ class CopilotCliBackend:
         async with self._semaphore:
             return await self._run(prompt, model=model, reasoning_effort=reasoning_effort)
 
+    async def start(self) -> None:
+        """Prepare the backend; one-shot calls need no shared resources."""
+
+    async def close(self) -> None:
+        """Release shared resources; one-shot processes are cleaned up per call."""
+
+    async def __aenter__(self) -> CopilotCliBackend:
+        await self.start()
+        return self
+
+    async def __aexit__(self, exc_type, exc, traceback) -> None:
+        await self.close()
+
     async def _run(
         self,
         prompt: str,
@@ -84,8 +124,12 @@ class CopilotCliBackend:
         model: str,
         reasoning_effort: ReasoningEffort,
     ) -> CallResult:
+        if not model.strip() or model.startswith("-"):
+            raise BackendError("model must be a non-empty model identifier, not a CLI option")
+        extra_args = self._tool_free_args()
         start = time.perf_counter()
         with tempfile.TemporaryDirectory(prefix="decision-wrapper-") as scratch:
+            usage_path = Path(scratch) / "usage.json"
             args = [
                 self.binary,
                 "-p",
@@ -94,16 +138,20 @@ class CopilotCliBackend:
                 model,
                 "--reasoning-effort",
                 reasoning_effort,
+                # Required for non-interactive CLI turns; availability remains empty.
+                "--allow-all-tools",
                 "--silent",
                 "--output-format",
                 "json",
                 "--log-level",
                 "none",
+                "--usage-output-file",
+                str(usage_path),
                 "-C",
                 scratch,
                 "--session-id",
                 str(uuid.uuid4()),
-                *self.extra_args,
+                *extra_args,
             ]
             try:
                 proc = await asyncio.create_subprocess_exec(
@@ -116,9 +164,17 @@ class CopilotCliBackend:
                     proc.communicate(), timeout=self.timeout_s
                 )
             except asyncio.TimeoutError as exc:
+                if proc.returncode is None:
+                    proc.kill()
+                await proc.wait()
                 raise BackendError(
                     f"copilot CLI timed out after {self.timeout_s}s"
                 ) from exc
+            except asyncio.CancelledError:
+                if proc.returncode is None:
+                    proc.kill()
+                await proc.wait()
+                raise
 
             wall_time_ms = (time.perf_counter() - start) * 1000
 
@@ -127,7 +183,18 @@ class CopilotCliBackend:
                     f"copilot CLI exited {proc.returncode}: {stderr.decode(errors='replace')[:2000]}"
                 )
 
-            return self._parse_jsonl(stdout.decode(errors="replace"), wall_time_ms)
+            result = self._parse_jsonl(stdout.decode(errors="replace"), wall_time_ms)
+            if usage_path.is_file():
+                try:
+                    usage = json.loads(usage_path.read_text(encoding="utf-8"))
+                except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+                    raise BackendError("copilot CLI produced an invalid usage file") from exc
+                if not isinstance(usage, dict):
+                    raise BackendError("copilot CLI usage file must contain a JSON object")
+                credits = _credits_from_usage(usage)
+                if credits is not None:
+                    result.ai_credits = credits
+            return result
 
     @staticmethod
     def _parse_jsonl(raw: str, wall_time_ms: float) -> CallResult:
@@ -135,6 +202,7 @@ class CopilotCliBackend:
         premium_requests = 0.0
         prompt_tokens = 0
         api_duration_ms = 0.0
+        ai_credits: Optional[float] = None
         events = []
 
         for line in raw.splitlines():
@@ -157,6 +225,7 @@ class CopilotCliBackend:
                 ) else event.get("usage", {})
                 premium_requests = float(usage.get("premiumRequests", 0.0) or 0.0)
                 api_duration_ms = float(usage.get("totalApiDurationMs", 0.0) or 0.0)
+                ai_credits = _credits_from_usage(usage)
 
         if content is None:
             raise BackendError(
@@ -171,7 +240,31 @@ class CopilotCliBackend:
             api_duration_ms=api_duration_ms,
             wall_time_ms=wall_time_ms,
             raw_events=events,
+            ai_credits=ai_credits,
         )
+
+
+def create_backend(
+    *,
+    warm: bool = False,
+    timeout_s: float = 90.0,
+    max_concurrency: int = 4,
+) -> CopilotCliBackend:
+    if warm:
+        if sys.version_info < (3, 11):
+            raise BackendError("warm mode requires Python 3.11 or newer")
+        try:
+            from .warm_backend import WarmCopilotCliBackend
+        except ModuleNotFoundError as exc:
+            if exc.name != "copilot":
+                raise
+            raise BackendError(
+                'warm mode requires the SDK: pip install -e ".[warm]"'
+            ) from exc
+        return WarmCopilotCliBackend(
+            timeout_s=timeout_s, max_concurrency=max_concurrency
+        )
+    return CopilotCliBackend(timeout_s=timeout_s, max_concurrency=max_concurrency)
 
 
 _ISOLATED_LETTER_RE = re.compile(r"(?<![A-Za-z])[A-Za-z](?![A-Za-z])")

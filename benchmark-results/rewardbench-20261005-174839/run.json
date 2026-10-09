@@ -1,0 +1,64 @@
+{
+  "dataset": "datasets\\rewardbench_sample.jsonl",
+  "dataset_sha256": "2632d7a79c06b238c8e7c6dcf3f5d61ce6236c4fc4a2b857da306f43232cf7d3",
+  "items": 30,
+  "samples_per_question": 1,
+  "warm": true,
+  "order": "Rotate the three configurations for each successive item",
+  "started_at": "2026-10-05T17:48:39.739363",
+  "startup_ms": 4626.371299964376,
+  "completed_at": "2026-10-05T17:52:42.410389",
+  "total_wall_ms": 242667.93319990393,
+  "results": [
+    {
+      "model": "gpt-5.4-mini",
+      "reasoning_effort": "none",
+      "items": 30,
+      "accuracy": 0.9666666666666667,
+      "p50_latency_ms": 2013.417899957858,
+      "p95_latency_ms": 3292.9699049680476,
+      "correct": 29,
+      "backend_failures": 0,
+      "legacy_avg_premium_requests": 0.33,
+      "legacy_total_premium_requests": 9.9,
+      "avg_ai_credits": null,
+      "total_ai_credits": null
+    },
+    {
+      "model": "gpt-6-luna",
+      "reasoning_effort": "low",
+      "items": 30,
+      "accuracy": 0.9333333333333333,
+      "p50_latency_ms": 2517.4817999941297,
+      "p95_latency_ms": 6647.932609962295,
+      "correct": 28,
+      "backend_failures": 0,
+      "legacy_avg_premium_requests": 1.0,
+      "legacy_total_premium_requests": 30.0,
+      "avg_ai_credits": null,
+      "total_ai_credits": null
+    },
+    {
+      "model": "gpt-6-luna",
+      "reasoning_effort": "none",
+      "items": 30,
+      "accuracy": 0.9333333333333333,
+      "p50_latency_ms": 2259.7327000112273,
+      "p95_latency_ms": 2606.973810045747,
+      "correct": 28,
+      "backend_failures": 0,
+      "legacy_avg_premium_requests": 1.0,
+      "legacy_total_premium_requests": 30.0,
+      "avg_ai_credits": null,
+      "total_ai_credits": null
+    }
+  ],
+  "failures": [],
+  "mismatch_counts": {
+    "gpt-6-luna/none": 2,
+    "gpt-6-luna/low": 2,
+    "gpt-5.4-mini/none": 1
+  },
+  "cost_metric": "ai_credits",
+  "billing_correction": "AI-credit usage was not recorded for this run. Legacy premium-request counters are not AI credits and cannot be converted. Accuracy and latency results are unchanged."
+}

@@ -1,0 +1,71 @@
+{
+  "scope": {
+    "protocol": "jevbench::v1.2",
+    "source_commit": "bb05a335bc809e61b20c0f745d25499a82b326fc",
+    "canonical_dataset_sha256": "dc3995d8ae1e2fc8e81ce38431add509eb8bb39b85aadfd0c7c32079382dde51",
+    "n_public_tasks": 231,
+    "scorer": "jevbench.scoring + jevbench.summarize",
+    "scope": "published public corpus only; not the current sealed-inclusive leaderboard",
+    "language": "not annotated by the published corpus; no translations added",
+    "structured_state": "serialized as Unicode JSON with sorted keys for every adapter",
+    "calibration": "GLiNER is label-only; Mini probabilities are one-sample vote shares, not native likelihoods"
+  },
+  "results": [
+    {
+      "engine": "copilot",
+      "checkpoint": "gpt-5.4-mini",
+      "correct": 190,
+      "total": 231,
+      "accuracy": 0.8225108225108225,
+      "macro_accuracy": 0.8210509934968139,
+      "p50_s": 2.1943384999176487,
+      "p95_s": 2.558617749949917,
+      "ai_credits_including_warmups": 33.9771,
+      "schema_validity": 1.0,
+      "brier": 0.354978354978355,
+      "ece": 0.17748917748917747
+    },
+    {
+      "engine": "strands",
+      "checkpoint": "StrandsAgents/strands-decider-2B-hobson-v21",
+      "correct": 175,
+      "total": 231,
+      "accuracy": 0.7575757575757576,
+      "macro_accuracy": 0.7699552530563882,
+      "p50_s": 2.090949699981138,
+      "p95_s": 36.26995525008533,
+      "ai_credits_including_warmups": 0.0,
+      "schema_validity": 1.0,
+      "brier": 0.3279402142857143,
+      "ece": 0.05796536796536786
+    },
+    {
+      "engine": "gliner",
+      "checkpoint": "fastino/GLiNER2.5-multi-Decide",
+      "correct": 126,
+      "total": 231,
+      "accuracy": 0.5454545454545454,
+      "macro_accuracy": 0.5003448845425109,
+      "p50_s": 0.22142219997476786,
+      "p95_s": 17.987295900005847,
+      "ai_credits_including_warmups": 0.0,
+      "schema_validity": 1.0,
+      "brier": null,
+      "ece": null
+    },
+    {
+      "engine": "laya",
+      "checkpoint": "convaiinnovations/laya-multilingual",
+      "correct": 108,
+      "total": 231,
+      "accuracy": 0.4675324675324675,
+      "macro_accuracy": 0.44471213436641716,
+      "p50_s": 0.16717740008607507,
+      "p95_s": 7.028794549929444,
+      "ai_credits_including_warmups": 0.0,
+      "schema_validity": 1.0,
+      "brier": 0.7433346391774891,
+      "ece": 0.2893311688311687
+    }
+  ]
+}

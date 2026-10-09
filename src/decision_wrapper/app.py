@@ -7,12 +7,27 @@ POST /v1/decisions  -- same request/response shape as DecisionRequest/Response.
 from __future__ import annotations
 
 import os
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
 
-from .backend import BackendError, CopilotCliBackend
+from .backend import BackendError, create_backend
 from .engine import decide
 from .schema import DecisionRequest, DecisionResponse
+
+_backend = create_backend(
+    warm=os.environ.get("DECISION_WRAPPER_WARM", "0") == "1",
+    max_concurrency=int(os.environ.get("DECISION_WRAPPER_MAX_CONCURRENCY", "4")),
+    timeout_s=float(os.environ.get("DECISION_WRAPPER_TIMEOUT_S", "90")),
+)
+_default_samples = int(os.environ.get("DECISION_WRAPPER_SAMPLES", "3"))
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    async with _backend:
+        yield
+
 
 app = FastAPI(
     title="decision-wrapper",
@@ -22,13 +37,8 @@ app = FastAPI(
         "`questions` (noul/choice/score) and get calibrated answers back."
     ),
     version="0.1.0",
+    lifespan=lifespan,
 )
-
-_backend = CopilotCliBackend(
-    max_concurrency=int(os.environ.get("DECISION_WRAPPER_MAX_CONCURRENCY", "4")),
-    timeout_s=float(os.environ.get("DECISION_WRAPPER_TIMEOUT_S", "90")),
-)
-_default_samples = int(os.environ.get("DECISION_WRAPPER_SAMPLES", "3"))
 
 
 @app.post("/v1/decisions", response_model=DecisionResponse)

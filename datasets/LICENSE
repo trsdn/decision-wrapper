@@ -1,0 +1,16 @@
+Original project examples:
+  sample_benchmark.jsonl
+  bilingual_benchmark.jsonl
+are covered by the MIT license in ../LICENSE.
+
+rewardbench_sample.jsonl contains information from the RewardBench evaluation
+dataset by Allen Institute for AI and its contributors:
+https://huggingface.co/datasets/allenai/reward-bench
+which is made available under the Open Data Commons Attribution License
+(ODC-By) v1.0:
+https://opendatacommons.org/licenses/by/1-0/
+
+The sample is a stratified, rearranged and potentially truncated derivative.
+It is not relicensed under MIT. Individual contents can have additional
+rights/conditions not covered by the database license. See ../THIRD-PARTY.md
+for sources, transformations and scope.

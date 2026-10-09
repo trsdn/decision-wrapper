@@ -21,6 +21,7 @@ from .schema import (
     NoulAnswer,
     NoulQuestion,
     Question,
+    ReasoningEffort,
     ScoreAnswer,
     ScoreQuestion,
     Usage,
@@ -78,7 +79,7 @@ async def evaluate_question(
     question: Question,
     *,
     model: str,
-    reasoning_effort: str,
+    reasoning_effort: ReasoningEffort,
     samples: int,
 ) -> Tuple[Answer, Usage]:
     options = _build_options(question)
@@ -95,20 +96,28 @@ async def evaluate_question(
 
     votes: Counter[str] = Counter()
     premium_requests = 0.0
+    ai_credits: float | None = 0.0
     api_duration_ms = 0.0
+    prompt_tokens = 0
     ok = 0
     errors: List[str] = []
     for r in results:
         if isinstance(r, BaseException):
             errors.append(str(r))
+            ai_credits = None
             continue
+        premium_requests += r.premium_requests
+        api_duration_ms += r.api_duration_ms
+        prompt_tokens += r.prompt_tokens
+        ai_credits = (
+            ai_credits + r.ai_credits
+            if ai_credits is not None and r.ai_credits is not None else None
+        )
         letter = extract_letter(r.text or "", valid_letters)
         if letter is None:
             errors.append(f"unparseable response: {r.text!r}")
             continue
         votes[letter] += 1
-        premium_requests += r.premium_requests
-        api_duration_ms += r.api_duration_ms
         ok += 1
 
     if ok == 0:
@@ -129,6 +138,8 @@ async def evaluate_question(
         samples=ok,
         premium_requests=premium_requests,
         api_duration_ms=api_duration_ms,
+        prompt_tokens=prompt_tokens,
+        ai_credits=ai_credits,
     )
 
     if isinstance(question, NoulQuestion):
@@ -158,25 +169,38 @@ async def decide(
 
     names = list(request.questions.keys())
     tasks = [
-        evaluate_question(
-            backend,
-            request.state,
-            request.questions[name],
-            model=request.model,
-            reasoning_effort=request.reasoning_effort,
-            samples=samples,
+        asyncio.create_task(
+            evaluate_question(
+                backend,
+                request.state,
+                request.questions[name],
+                model=request.model,
+                reasoning_effort=request.reasoning_effort,
+                samples=samples,
+            )
         )
         for name in names
     ]
-    results = await asyncio.gather(*tasks)
+    try:
+        results = await asyncio.gather(*tasks)
+    except BaseException:
+        for task in tasks:
+            task.cancel()
+        await asyncio.gather(*tasks, return_exceptions=True)
+        raise
 
     answers: Dict[str, Answer] = {}
-    total_usage = Usage(samples=0, premium_requests=0.0, api_duration_ms=0.0)
+    total_usage = Usage(samples=0, premium_requests=0.0, api_duration_ms=0.0, ai_credits=0.0)
     for name, (answer, usage) in zip(names, results):
         answers[name] = answer
         total_usage.samples += usage.samples
         total_usage.premium_requests += usage.premium_requests
         total_usage.api_duration_ms += usage.api_duration_ms
+        total_usage.prompt_tokens += usage.prompt_tokens
+        total_usage.ai_credits = (
+            total_usage.ai_credits + usage.ai_credits
+            if total_usage.ai_credits is not None and usage.ai_credits is not None else None
+        )
 
     latency_ms = (time.perf_counter() - start) * 1000
     return DecisionResponse(

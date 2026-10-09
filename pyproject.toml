@@ -28,6 +28,16 @@ dev = [
 datasets = [
   "pyarrow>=16.0",
 ]
+warm = [
+  "github-copilot-sdk==1.0.15; python_version >= '3.11'",
+]
+local = [
+  "laya==0.3.21",
+  "gliner2==2.0.0",
+  "transformers>=4.48,<5",
+  "peft>=0.17,<0.19",
+  "protobuf>=5",
+]
 
 [project.scripts]
 decision-wrapper = "decision_wrapper.cli:app"

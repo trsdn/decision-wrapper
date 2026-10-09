@@ -1,5 +1,5 @@
 """Aggregate ItemResult rows into a per-(model, reasoning_effort) markdown
-and CSV report: accuracy, p50/p95 latency, and premium-request cost.
+and CSV report: accuracy, p50/p95 latency, and actual AI-credit usage.
 """
 
 from __future__ import annotations
@@ -35,7 +35,8 @@ def summarize(results: List[ItemResult]) -> List[Dict]:
         total_correct = sum(r.correct for r in rs)
         total_qs = sum(r.total for r in rs)
         latencies = [r.latency_ms for r in rs]
-        premium = [r.premium_requests for r in rs]
+        credits = [r.ai_credits for r in rs if r.ai_credits is not None]
+        complete_accounting = len(credits) == len(rs)
         rows.append(
             {
                 "model": model,
@@ -44,8 +45,8 @@ def summarize(results: List[ItemResult]) -> List[Dict]:
                 "accuracy": total_correct / total_qs if total_qs else 0.0,
                 "p50_latency_ms": _percentile(latencies, 0.5),
                 "p95_latency_ms": _percentile(latencies, 0.95),
-                "avg_premium_requests": statistics.fmean(premium) if premium else 0.0,
-                "total_premium_requests": sum(premium),
+                "avg_ai_credits": statistics.fmean(credits) if complete_accounting else None,
+                "total_ai_credits": sum(credits) if complete_accounting else None,
             }
         )
     return rows
@@ -69,6 +70,6 @@ def to_markdown(rows: List[Dict]) -> str:
         cells = []
         for h in headers:
             v = row[h]
-            cells.append(f"{v:.3f}" if isinstance(v, float) else str(v))
+            cells.append("unknown" if v is None else f"{v:.3f}" if isinstance(v, float) else str(v))
         lines.append("| " + " | ".join(cells) + " |")
     return "\n".join(lines) + "\n"
